@@ -73,12 +73,11 @@
 			isa = PBXGroup;
 			children = (
 				87D4972224A4C2E5003713C5 /* Model */,
+				87D4972524A4CE00003713C5 /* Controllers */,
 				87D4970C24A47D72003713C5 /* AppDelegate.swift */,
-				87D4971024A47D72003713C5 /* MainViewController.swift */,
 				87D4971524A47D74003713C5 /* Assets.xcassets */,
 				87D4971724A47D74003713C5 /* LaunchScreen.storyboard */,
 				87D4971A24A47D74003713C5 /* Info.plist */,
-				87D4972024A49944003713C5 /* GetWeatherViewController.swift */,
 			);
 			path = ClimateApp;
 			sourceTree = "<group>";
@@ -89,6 +88,15 @@
 				87D4972324A4C306003713C5 /* WeatherDataModel.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		87D4972524A4CE00003713C5 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				87D4971024A47D72003713C5 /* MainViewController.swift */,
+				87D4972024A49944003713C5 /* GetWeatherViewController.swift */,
+			);
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 		D86F5694D29F02E39FECEB47 /* Frameworks */ = {
