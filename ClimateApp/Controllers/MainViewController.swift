@@ -14,7 +14,7 @@ import SwiftyJSON
 class MainViewController: UIViewController {
   
   let weatherURL = "https://api.openweathermap.org/data/2.5/weather"
-  let appID = "0fd65ae8051cec4f21c386659c25955b"
+  let appID = ""
   
   let locationManager = CLLocationManager()
   let weatherDataModel = WeatherDataModel()
