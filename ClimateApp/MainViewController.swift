@@ -7,11 +7,15 @@
 //
 
 import UIKit
+import CoreLocation
+import Alamofire
 
 class MainViewController: UIViewController {
   
   let weatherURL = "https://api.openweathermap.org/data/2.5/weather"
   let appID = "0fd65ae8051cec4f21c386659c25955b"
+  
+  let locationManager = CLLocationManager()
   
   lazy var mainImageView: UIImageView = {
     let img = UIImageView()
@@ -59,6 +63,10 @@ class MainViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     setupView()
+    locationManager.delegate = self
+    locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+    locationManager.requestWhenInUseAuthorization()
+    locationManager.startUpdatingLocation()
  
   }
   
@@ -97,7 +105,27 @@ class MainViewController: UIViewController {
     let nextVC = GetWeatherViewController()
     self.present(nextVC, animated: true, completion: nil)
   }
+  
+  private func getWeatherData(url: String, parameters: [String: String]) {
+    
+  }
 
 
 }
 
+extension MainViewController: CLLocationManagerDelegate {
+  func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    let location = locations[locations.count - 1] //get last value
+    if location.horizontalAccuracy > 0 {
+      locationManager.stopUpdatingLocation()
+      let latitude = String(location.coordinate.latitude)
+      let longitude = String(location.coordinate.longitude)
+      let params: [String: String] = ["lat": latitude, "lon": longitude, "appid": appID]
+      getWeatherData(url: weatherURL, parameters: params)
+    }
+  }
+  func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+    print(error)
+    loadingLabel.text = "Location Unavailable"
+  }
+}

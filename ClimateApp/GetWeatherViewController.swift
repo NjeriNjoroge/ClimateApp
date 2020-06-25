@@ -42,6 +42,7 @@ class GetWeatherViewController: UIViewController {
     btn.tintColor = .white
     btn.setImage(UIImage(named: "backArrow"), for: .normal)
     btn.translatesAutoresizingMaskIntoConstraints = false
+    btn.addTarget(self, action: #selector(dismissCurrentView), for: .touchUpInside)
     return btn
   }()
 
@@ -76,6 +77,10 @@ class GetWeatherViewController: UIViewController {
       backButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 30),
       backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15)
     ])
+  }
+  
+  @objc private func dismissCurrentView() {
+    self.dismiss(animated: true, completion: nil)
   }
 
 }

@@ -7,5 +7,6 @@ target 'ClimateApp' do
 
   # Pods for ClimateApp
 	pod 'Alamofire', '~> 5.0.0-beta.5'
+	pod 'SwiftyJSON', '~> 4.0'
 
 end
