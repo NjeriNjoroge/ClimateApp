@@ -9,6 +9,7 @@
 import UIKit
 import CoreLocation
 import Alamofire
+import SwiftyJSON
 
 class MainViewController: UIViewController {
   
@@ -16,6 +17,7 @@ class MainViewController: UIViewController {
   let appID = "0fd65ae8051cec4f21c386659c25955b"
   
   let locationManager = CLLocationManager()
+  let weatherDataModel = WeatherDataModel()
   
   lazy var mainImageView: UIImageView = {
     let img = UIImageView()
@@ -36,9 +38,8 @@ class MainViewController: UIViewController {
   
   lazy var weatherIcon: UIImageView = {
     let img = UIImageView()
-    img.contentMode = .scaleToFill
+    img.contentMode = .scaleAspectFit
     img.translatesAutoresizingMaskIntoConstraints = false
-    img.image = UIImage(named: "treeTrunk")
     return img
   }()
   
@@ -107,7 +108,37 @@ class MainViewController: UIViewController {
   }
   
   private func getWeatherData(url: String, parameters: [String: String]) {
-    
+    AF.request(url, method: .get, parameters: parameters).responseJSON { response in
+      switch response.result {
+      case .success:
+        let weatherJSON: JSON = JSON(response.data!)
+        self.updateWeatherData(json: weatherJSON)
+
+      case .failure(let error):
+        print("Error \(error)")
+        self.loadingLabel.text = "Connectivity Issues"
+      }
+    }
+  }
+  
+  private func updateWeatherData(json: JSON) {
+    if let tempResult = json["main"]["temp"].double {
+      let city = json["name"].stringValue
+      let condition = json["weather"][0]["id"].intValue
+      weatherDataModel.temperature = Int(tempResult - 273.15)
+      weatherDataModel.city = city
+      weatherDataModel.condition = condition
+      weatherDataModel.weatherIcon = weatherDataModel.updateWeatherIcon(condition: weatherDataModel.condition)
+      updateUIWithWeatherData()
+    } else {
+      loadingLabel.text = "Weather Unavailable"
+    }
+  }
+  
+  private func updateUIWithWeatherData() {
+    loadingLabel.text = weatherDataModel.city
+    temparatureLabel.text = "\(weatherDataModel.temperature)"
+    weatherIcon.image = UIImage(named: weatherDataModel.weatherIcon)
   }
 
 
