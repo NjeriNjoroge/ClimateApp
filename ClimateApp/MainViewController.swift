@@ -104,6 +104,7 @@ class MainViewController: UIViewController {
   
   @objc private func openGetWeather() {
     let nextVC = GetWeatherViewController()
+    nextVC.delegate = self
     self.present(nextVC, animated: true, completion: nil)
   }
   
@@ -137,7 +138,7 @@ class MainViewController: UIViewController {
   
   private func updateUIWithWeatherData() {
     loadingLabel.text = weatherDataModel.city
-    temparatureLabel.text = "\(weatherDataModel.temperature)"
+    temparatureLabel.text = "\(weatherDataModel.temperature)°"
     weatherIcon.image = UIImage(named: weatherDataModel.weatherIcon)
   }
 
@@ -158,5 +159,12 @@ extension MainViewController: CLLocationManagerDelegate {
   func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
     print(error)
     loadingLabel.text = "Location Unavailable"
+  }
+}
+
+extension MainViewController: ChangeCityDelegate {
+  func userEnteredACityName(city: String) {
+    let params: [String: String] = ["q": city, "appid": appID]
+    getWeatherData(url: weatherURL, parameters: params)
   }
 }

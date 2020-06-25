@@ -8,7 +8,13 @@
 
 import UIKit
 
+protocol ChangeCityDelegate {
+  func userEnteredACityName(city: String)
+}
+
 class GetWeatherViewController: UIViewController {
+  
+  var delegate: ChangeCityDelegate?
   
   lazy var mainImageView: UIImageView = {
     let img = UIImageView()
@@ -33,6 +39,7 @@ class GetWeatherViewController: UIViewController {
     btn.tintColor = .white
     btn.setTitle("Get Weather", for: .normal)
     btn.titleLabel?.font = UIFont.systemFont(ofSize: 50)
+    btn.addTarget(self, action: #selector(dismissCurrentView), for: .touchUpInside)
     btn.translatesAutoresizingMaskIntoConstraints = false
     return btn
   }()
@@ -42,7 +49,6 @@ class GetWeatherViewController: UIViewController {
     btn.tintColor = .white
     btn.setImage(UIImage(named: "backArrow"), for: .normal)
     btn.translatesAutoresizingMaskIntoConstraints = false
-    btn.addTarget(self, action: #selector(dismissCurrentView), for: .touchUpInside)
     return btn
   }()
 
@@ -80,6 +86,8 @@ class GetWeatherViewController: UIViewController {
   }
   
   @objc private func dismissCurrentView() {
+    let cityName = cityNameTextField.text
+    delegate?.userEnteredACityName(city: cityName ?? "")
     self.dismiss(animated: true, completion: nil)
   }
 
